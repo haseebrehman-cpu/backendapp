@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug server (node)",
+      "program": "${workspaceFolder}/src/server.js",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug server (nodemon)",
+      "runtimeExecutable": "nodemon",
+      "runtimeArgs": ["--inspect"],
+      "program": "${workspaceFolder}/src/server.js",
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

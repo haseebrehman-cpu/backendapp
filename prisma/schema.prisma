@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  profilePicture String?
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  movies Movie[] @relation("MovieCreator")
+  watchlistItems WatchlistItem[]
+  products Product[]
+
+  @@index([createdAt, isVerified])
+
+  // @@map("users")
+}
+
+model Movie {
+  id          String   @id @default(uuid())
+  title       String
+  overview    String?
+  releaseYear Int
+  genres      String[] @default([])
+  runtime     Int?
+  posterUrl   String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creator User @relation("MovieCreator", fields: [createdBy], references: [id], onDelete: Cascade)
+  watchlistItems WatchlistItem[]
+
+  @@index([createdAt, releaseYear])
+}
+
+model WatchlistItem {
+  id        String          @id @default(uuid())
+  userId    String 
+  movieId   String
+  status    WatchlistStatus @default(PLANNED)
+  rating    Int?
+  notes     String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  // @@map("movie_watchlists")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+}
+
+enum WatchlistStatus {
+  PLANNED
+  WATCHING
+  COMPLETED
+  ON_HOLD
+  DROPPED
+}
+
+
+model Product { 
+  id String @id @default(uuid())
+  name String
+  description String
+  price Float
+  quantity Int
+  category ProductCategory
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  addedBy User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+}
+
+enum ProductCategory {
+  ELECTRONICS
+  CLOTHING
+  FOOD
+  OTHER
+}
