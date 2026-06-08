@@ -54,4 +54,29 @@ const getAllProducts = async (req, res) => {
   }
 }
 
-export { createProduct, getAllProducts };
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) return res.status(404).json({ message: 'Product not found', status: 'error', code: 404 });
+
+    // Only the creator can delete their product
+    if (product.createdBy !== req.user.id) {
+      return res.status(403).json({ message: 'Forbidden', status: 'error', code: 403 });
+    }
+
+    await prisma.product.delete({ where: { id } });
+
+    // Remove individual product cache and invalidate AllProducts list
+    await redisClient.del(`product:${id}`);
+    await redisClient.del('AllProducts');
+
+    return res.status(200).json({ message: 'Product deleted successfully', status: 'success', code: 200 });
+  } catch (error) {
+    console.error('deleteProduct error:', error);
+    return res.status(500).json({ message: 'Internal server error', status: 'error', code: 500 });
+  }
+}
+
+export { createProduct, getAllProducts, deleteProduct };
