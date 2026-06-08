@@ -32,34 +32,34 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', async (error) => {
-  console.log('Unhandled promise rejection: ', error);
-  server.close(async() => {
-    await disconnectDB();
+// In production (Vercel), the platform handles HTTP — just export the app.
+// For local dev, start a regular server.
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
-  process.exit(1);
-});
 
-// Handle uncaught exceptions
-process.on('uncaughtException', async (error) => {
-  console.log('Uncaught exception: ', error);
-  await disconnectDB();
-  process.exit(1);
-});
+  process.on('unhandledRejection', async (error) => {
+    console.log('Unhandled promise rejection: ', error);
+    server.close(async () => {
+      await disconnectDB();
+    });
+    process.exit(1);
+  });
 
-// Graceful shutdown
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM signal received: shutting down gracefully');
-  await disconnectDB();
-  await disconnectRedis();
-  process.exit(0);
-});
+  process.on('uncaughtException', async (error) => {
+    console.log('Uncaught exception: ', error);
+    await disconnectDB();
+    process.exit(1);
+  });
 
-export default server;
+  process.on('SIGTERM', async () => {
+    console.log('SIGTERM signal received: shutting down gracefully');
+    await disconnectDB();
+    await disconnectRedis();
+    process.exit(0);
+  });
+}
+
+export default app;
