@@ -16,17 +16,43 @@ const sendVerificationEmail = async (user) => {
     to: user.email,
     subject: 'Verify your email address',
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
-        <h2>Welcome, ${user.name}!</h2>
-        <p>Please verify your email address to activate your account.</p>
-        <p>
-          <a href="${verificationUrl}"
-             style="display:inline-block;padding:12px 20px;background:#4f46e5;color:#fff;text-decoration:none;border-radius:6px;">
-            Verify Email
-          </a>
-        </p>
-        <p>Or copy and paste this link into your browser:</p>
-        <p style="color:#888;font-size:12px;">This link expires in 24 hours.</p>
+      <div style="background-color:#f4f7fb;padding:40px 20px;font-family:Arial,sans-serif;">
+        <div style="max-width:600px;margin:0 auto;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <div style="background:linear-gradient(135deg,#4f46e5,#3730a3);padding:32px 24px;text-align:center;">
+            <h1 style="color:#ffffff;margin:0;font-size:24px;font-weight:bold;">Verify Your Email</h1>
+          </div>
+
+          <!-- Body -->
+          <div style="padding:32px;">
+            <p style="color:#374151;font-size:16px;margin:0 0 8px;">Hi <strong>${user.name}</strong>,</p>
+            <p style="color:#374151;font-size:15px;margin:0 0 28px;">
+              Thanks for signing up! Please verify your email address to activate your account.
+              This link expires in <strong>24 hours</strong>.
+            </p>
+
+            <!-- Button -->
+            <div style="text-align:center;margin-bottom:28px;">
+              <a href="${verificationUrl}"
+                 style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#4f46e5,#3730a3);color:#ffffff;text-decoration:none;border-radius:8px;font-size:15px;font-weight:bold;letter-spacing:0.3px;">
+                Verify Email Address
+              </a>
+            </div>
+
+            <p style="color:#6b7280;font-size:13px;margin:0;">
+              If you did not create an account, you can safely ignore this email.
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="padding:20px;background-color:#f9fafb;text-align:center;border-top:1px solid #e5e7eb;">
+            <p style="margin:0;color:#6b7280;font-size:13px;">
+              This is an automated email — please do not reply.
+            </p>
+          </div>
+
+        </div>
       </div>
     `,
   });
