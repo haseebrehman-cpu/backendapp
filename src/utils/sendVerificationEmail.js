@@ -8,7 +8,7 @@ const sendVerificationEmail = async (user) => {
     { expiresIn: '1d' }
   );
 
-  const baseUrl = process.env.APP_BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
+  const baseUrl = process.env.APP_BASE_URL;
   const verificationUrl = `${baseUrl}/api/v1/auth/verify-email?token=${token}`;
 
   await transporter.sendMail({
