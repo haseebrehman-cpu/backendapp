@@ -26,7 +26,6 @@ const sendVerificationEmail = async (user) => {
           </a>
         </p>
         <p>Or copy and paste this link into your browser:</p>
-        <p><a href="${verificationUrl}">${verificationUrl}</a></p>
         <p style="color:#888;font-size:12px;">This link expires in 24 hours.</p>
       </div>
     `,
