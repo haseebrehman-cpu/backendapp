@@ -35,7 +35,7 @@ const sendVerificationEmail = async (user) => {
             <!-- Button -->
             <div style="text-align:center;margin-bottom:28px;">
               <a href="${verificationUrl}"
-                 style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#4f46e5,#3730a3);color:#ffffff;text-decoration:none;border-radius:8px;font-size:15px;font-weight:bold;letter-spacing:0.3px;">
+                 style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#4f46e5,#3730a3);color:#000;text-decoration:none;border-radius:8px;font-size:15px;font-weight:bold;letter-spacing:0.3px;">
                 Verify Email Address
               </a>
             </div>
